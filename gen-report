@@ -1,0 +1,49 @@
+#!/bin/bash
+
+# Set posix mode
+set -o posix;
+
+# Define Variables
+client_name='';
+client_phone='';
+client_email='';
+client_bizz_name='';.
+
+report_date=$(date +%Y-%m-%d); # Sets file name later
+
+# Set report path
+report_path=/home/awesomepilot/Documents/Work/Notes
+
+# Get work notes
+function get_work_notes() {
+    echo "Enter work notes, hit Ctl-D to save>";
+    work=$(</dev/stdin);
+}
+
+
+# Set side notes
+function get_side_notes() {
+    echo "Enter side notes if any, hit Ctl-D to save>"
+    notes=$(</dev/stdin);
+}
+
+# Create report at ~/$USER/Documents/Work/Notes/
+cat > $report_path/$report_date.txt <<- "_EOF_"
+(End of Day Report)
+## Client Information ##
+------------------------------------------
+Client Name: $client_name
+Client Phone: $client_phone
+Client Email: $client_email
+Client Business: $client_bizz_name
+------------------------------------------
+## Work Performed ##
+------------------------------------------
+$work
+------------------------------------------
+## Notes ##
+------------------------------------------
+$notes
+------------------------------------------
+_EOF_
+
