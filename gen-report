@@ -3,32 +3,47 @@
 # Set posix mode
 set -o posix;
 
-# Define Variables
-client_name='';
-client_phone='';
-client_email='';
-client_bizz_name='';.
-
 report_date=$(date +%Y-%m-%d); # Sets file name later
 
 # Set report path
 report_path=/home/awesomepilot/Documents/Work/Notes
 
+# Parse arguments and set variables
+while getopts "n:p:e:b:h" arg; do
+    case $arg in
+        n)
+            client_name=${OPTARG}
+        ;;
+        p)
+            client_phone=${OPTARG}
+        ;;
+        e)
+            client_email=${OPTARG}
+        ;;
+        b)
+            client_bizz_name=${OPTARG}
+        ;;
+        h)
+            cat ./usr/bin/help_doc.txt;
+            exit 0
+        ;;
+        *)
+            echo "Oops you may have made an invalid entry.  Pleae try again.";
+            exit 1;
+    esac
+done
+
 # Get work notes
-function get_work_notes() {
-    echo "Enter work notes, hit Ctl-D to save>";
-    work=$(</dev/stdin);
-}
+echo "Enter work notes, hit Ctl-D to save>";
+work=$(</dev/stdin);
 
 
 # Set side notes
-function get_side_notes() {
-    echo "Enter side notes if any, hit Ctl-D to save>"
-    notes=$(</dev/stdin);
-}
+echo "Enter side notes if any, hit Ctl-D to save>"
+notes=$(</dev/stdin);
 
 # Create report at ~/$USER/Documents/Work/Notes/
-cat > $report_path/$report_date.txt <<- "_EOF_"
+cat > $report_path/$report_date.txt <<-_EOF_
 (End of Day Report)
 ## Client Information ##
 ------------------------------------------
@@ -47,3 +62,5 @@ $notes
 ------------------------------------------
 _EOF_
 
+echo "Report generated successuflly!"
+cat $report_path/$report_date.txt;

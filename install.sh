@@ -13,7 +13,7 @@ fi
 chmod +x ./gen-report;
 
 # Get currently logged in user
-CURRENT_USER=$(whoami);
+CURRENT_USER=$(logname);
 
 # Define install directory
 INSTALL_DIR=/usr/bin/;
@@ -37,7 +37,7 @@ if [ ! -d $INSTALL_DIR ];then
 fi
 
 # Install gen-report
-cp ./gen-report $INSTALL_DIR;
+cp ./gen-report $INSTALL_DIR && cp ./help_doc.txt $INSTALL_DIR;
 if [ $? != 0 ];then
     echo "There was a problem installing gen-report.  Make sure you are running this script as root, and the direcory /usr/bin/ exists...";
     exit 1;
