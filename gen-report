@@ -8,6 +8,9 @@ report_date=$(date +%Y-%m-%d); # Sets file name later
 # Set report path
 report_path=/home/awesomepilot/Documents/Work/Notes
 
+# Get the current report file
+report_file=$report_path/$report_date.txt;
+
 # Parse arguments and set variables
 while getopts "n:p:e:b:h" arg; do
     case $arg in
@@ -24,7 +27,7 @@ while getopts "n:p:e:b:h" arg; do
             client_bizz_name=${OPTARG}
         ;;
         h)
-            cat ./usr/bin/help_doc.txt;
+            cat /usr/bin/help_doc.txt;
             exit 0
         ;;
         *)
@@ -33,17 +36,20 @@ while getopts "n:p:e:b:h" arg; do
     esac
 done
 
+# Create report at ~/$USER/Documents/Work/Notes/
+function create_report() {
 # Get work notes
 echo "Enter work notes, hit Ctl-D to save>";
 work=$(</dev/stdin);
 
+# Next line
+echo \
 
 # Set side notes
-echo "Enter side notes if any, hit Ctl-D to save>"
+echo "Enter side notes if any, hit Ctl-D to save>";
 notes=$(</dev/stdin);
 
-# Create report at ~/$USER/Documents/Work/Notes/
-cat > $report_path/$report_date.txt <<-_EOF_
+cat > $report_path/$report_date.txt << _EOF_
 (End of Day Report)
 ## Client Information ##
 ------------------------------------------
@@ -61,6 +67,18 @@ $work
 $notes
 ------------------------------------------
 _EOF_
+}
+
+# Check if an entry was already made today
+if [ -f $report_file ]; then
+    if ( whiptail --title "Edit Entry?" --yesno "$entry already exists, would you like to edit it?" 12 60 --yes-button "Edit" --no-button "Overwrite") then
+        nano $report_file;
+        exit 0;
+    fi
+fi
+
+# Create new report if not exists and overwrite if it does
+create_report;
 
 echo "Report generated successuflly!"
 cat $report_path/$report_date.txt;

@@ -23,7 +23,8 @@ NOTES_DIR=/home/$CURRENT_USER/Documents/Work/Notes/;
 
 # Create notes directory if it doesn't exist
 if [ ! -d $NOTES_DIR ];then
-    mkdir $NOTES_DIR;
+    # Make notes directory and set owner to normal user
+    mkdir $NOTES_DIR && chown $CURRENT_USER $NOTES_DIR && chmod 777 $NOTES_DIR;
     if [ $? != 0 ];then
         echo "There was a problem creating a directory in $NOTES_DIR!  Make sure you have write access to that directory...";
         exit 1;
