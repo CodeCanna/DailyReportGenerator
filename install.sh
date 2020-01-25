@@ -9,8 +9,11 @@ if [ $USER != 'root' ];then
     exit 1;
 fi
 
+# Get current working directory
+working_dir=$(pwd);
+
 # Make gen-report executable
-chmod +x ./gen-report;
+chmod +x $working_dir/gen-report;
 
 # Get currently logged in user
 CURRENT_USER=$(logname);
@@ -38,7 +41,7 @@ if [ ! -d $INSTALL_DIR ];then
 fi
 
 # Install gen-report
-cp ./gen-report $INSTALL_DIR && cp ./help_doc.txt $INSTALL_DIR;
+cp $working_dir/gen-report $INSTALL_DIR && cp ./help_doc.txt $INSTALL_DIR;
 if [ $? != 0 ];then
     echo "There was a problem installing gen-report.  Make sure you are running this script as root, and the direcory /usr/bin/ exists...";
     exit 1;

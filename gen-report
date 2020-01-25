@@ -1,5 +1,10 @@
 #!/bin/bash
 
+:'
+This program takes user arguments and then takes two multiline strings as argurments.
+It then generates a report based on that input.
+'
+
 # Set posix mode
 set -o posix;
 
@@ -11,24 +16,46 @@ report_path=/home/awesomepilot/Documents/Work/Notes
 # Get the current report file
 report_file=$report_path/$report_date.txt;
 
+function list_entries() {
+    # Get entries directory
+    
+
+    # Loop and parse log entries
+    for entry in "$reports_dir"
+    do
+        # Add detected entries to an array
+        entry_list+=("$entry");
+    done
+
+    printf "${entry_list[@]}";
+    exit 0;
+}
+
 # Parse arguments and set variables
-while getopts "n:p:e:b:h" arg; do
+while getopts "n:p:e:b:hl" arg; do
     case $arg in
         n)
-            client_name=${OPTARG}
+            client_name=${OPTARG};
         ;;
         p)
-            client_phone=${OPTARG}
+            client_phone=${OPTARG};
         ;;
         e)
-            client_email=${OPTARG}
+            client_email=${OPTARG};
         ;;
         b)
-            client_bizz_name=${OPTARG}
+            client_bizz_name=${OPTARG};
         ;;
         h)
             cat /usr/bin/help_doc.txt;
             exit 0
+        ;;
+        l)
+            list_entries;
+        ;;
+        ?)
+            cat /usr/bin/help_doc.txt;
+            exit 1;
         ;;
         *)
             echo "Oops you may have made an invalid entry.  Pleae try again.";
@@ -38,19 +65,23 @@ done
 
 # Create report at ~/$USER/Documents/Work/Notes/
 function create_report() {
+# Clear screen
+clear;
+
 # Get work notes
 echo "Enter work notes, hit Ctl-D to save>";
 work=$(</dev/stdin);
 
-# Next line
-echo \
+# Clear screen
+clear;
 
 # Set side notes
 echo "Enter side notes if any, hit Ctl-D to save>";
 notes=$(</dev/stdin);
 
 cat > $report_path/$report_date.txt << _EOF_
-(End of Day Report)
+(Client Report)
+------------------------------------------
 ## Client Information ##
 ------------------------------------------
 Client Name: $client_name
@@ -69,9 +100,24 @@ $notes
 _EOF_
 }
 
+# Check if all arguments are accounted for
+if [ -z $client_name ]; then
+    echo "You cannot leave Client Name field empty...";
+    exit 1;
+elif [ -z $client_phone ]; then
+    echo "You cannot leave Client Phone field empty...";
+    exit 1;
+elif [ -z $client_email ]; then
+    echo "You cannot leave Client Email field empty...";
+    exit 1;
+elif [ -z $client_bizz_name ]; then
+    echo "You cannot leave Client Bussiness Name field empty...";
+    exit 1;
+fi
+
 # Check if an entry was already made today
 if [ -f $report_file ]; then
-    if ( whiptail --title "Edit Entry?" --yesno "$entry already exists, would you like to edit it?" 12 60 --yes-button "Edit" --no-button "Overwrite") then
+    if ( whiptail --title "Edit Entry?" --yesno "$entry already exists, would you like to edit it?" 12 60 --yes-button "Edit" --no-button "Overwrite" --cancel-button "Cancel" ) then
         nano $report_file;
         exit 0;
     fi
@@ -79,6 +125,8 @@ fi
 
 # Create new report if not exists and overwrite if it does
 create_report;
+
+clear
 
 echo "Report generated successuflly!"
 cat $report_path/$report_date.txt;
