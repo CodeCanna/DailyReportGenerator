@@ -2,6 +2,8 @@
 
 set -o posix;
 
+declare stderr=>&2;
+
 # Is current user root?
 function is_root() {
     if [ "$USER" != 'root' ]; then
@@ -13,20 +15,28 @@ function is_root() {
 }
 
 function create_redis_connection() {
+    if (! do_connect) then
+        return 1
+    fi
     # Start a redis instance
     systemctl start redis;
     if [ "$?" != 0 ]; then
-        echo "There was a problem starting redis!";
-        echo "Try running 'systemctl status redis' to see why Redis failed to start.";
-        echo "This is a Fatal Error, Exiting";
-        exit "$?";
+        echo "There was a problem starting redis!"\
+        "Try running 'systemctl status redis' to see why Redis failed to start."\
+        "This is a Fatal Error, Exiting" >&2;
+        # Return failure code
+        return 1;
     fi
-
+    
     echo "Redis Started Sucessfully!";
     return 0;
 }
 
 function destroy_redis_connection() {
+    if (! do_disconnect) then
+        return 1;
+    fi
+
     # Stop redis instance
     systemctl stop redis;
     if [ "$?" != 0 ]; then
@@ -36,14 +46,32 @@ function destroy_redis_connection() {
         echo "CRASHING AND BURNING...";
         exit 1;
     fi
-
+    
     echo "Redis shut down successfully, connection closed.";
+    return 0;
 }
 
-function do_reconnect() {
+function do_connect() {
     while true; do
-        read -p "Would you like to try reconnecting to Redis? [Y, N]" choice;
+        read -p "Would you like to connect to Redis? [Y, N]" choice;
+        
+        case $choice in
+            'Y' | 'y')
+                return 0;
+            ;;
+            'N' | 'n')
+                exit 1;
+            ;;
+            *)
+                echo "Invalid option press the Y or the N key.";
+        esac
+    done
+}
 
+function do_disconnect() {
+    while true; do
+        read -p "Are you sure you want to disconnect from Redis?  This will close your connection to Redis and stop the Redis service! [Y, N]" choice;
+        
         case $choice in
             'Y' | 'y')
                 return 0;
@@ -52,7 +80,7 @@ function do_reconnect() {
                 return 1;
             ;;
             *)
-                echo "Invalid option press the Y or the N key."
+                echo "Invalid option press the Y or the N key.";
         esac
     done
 }
@@ -60,15 +88,11 @@ function do_reconnect() {
 # Checks the connection to Redis
 function has_redis_connection() {
     # Ping redis server
-    redis-cli ping;
-    if [ "$?" != 0 ]; then
-        echo "Make sure Redis is started/enabled by your init system...";
-        echo "Try running 'sudo systemctl status redis' to check the status of Redis.";
-        echo "If the process is not running type 'sudo systemctl start redis' to start the redis daemon.";
-        echo "Otherwise try consulting the Redis docs at https://redis.io/documentation";
+    redis_pinged=$(redis-cli ping)
+    if [[ $redis_pinged != 'PONG' ]]; then
         return 1;
     fi
-
+    
     return 0
 }
 
