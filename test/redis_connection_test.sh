@@ -14,20 +14,22 @@ if (! has_redis_connection) then
         exit 1;
     fi
 
-    echo "** Test passed! You should be able to connect to Redis! **";
-    exit 0;
+    echo "** Test passed! Successfully Connected to Redis!! **";
 fi
+
+echo "Now testing the disconnect";
+sleep 2;
 
 # If connected to redis
 if (has_redis_connection) then
     # Disconnect from redis
     destroy_redis_connection;
     if [ "$?" != 0 ]; then
-        echo "Test Failed: Couldn't shut Redis down properly, this is not good...";
+        echo "Keeping Redis running, you might have to either re-run this script or stop Redis youself with systemd.";
         exit 1;
     fi
 
-    echo "** Test Passed! Successfully Disconnected from Redis! **";
-    exit 0;
+    echo "** Test Passed! Successfully Disconnected from Redis!! **";
 fi
 
+exit 0;

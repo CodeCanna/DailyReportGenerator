@@ -2,8 +2,6 @@
 
 set -o posix;
 
-declare stderr=>&2;
-
 # Is current user root?
 function is_root() {
     if [ "$USER" != 'root' ]; then
@@ -16,7 +14,7 @@ function is_root() {
 
 function create_redis_connection() {
     if (! do_connect) then
-        return 1
+        return 1;
     fi
     # Start a redis instance
     systemctl start redis;
@@ -37,16 +35,16 @@ function destroy_redis_connection() {
         return 1;
     fi
 
-    # Stop redis instance
-    systemctl stop redis;
-    if [ "$?" != 0 ]; then
+    # Stop redis instance and test that it's down
+    systemctl stop redis && redis_is_down=$(redis-cli ping);
+    if [[ "$?" != 0 ]] && [[ $redis_is_down == 'PONG' ]]; then
         echo "REDIS DID NOT SHUT DOWN PROPERLY!!!";
         echo "YOU MAY HAVE LOST DATA!!!";
         echo "CHECK YOUR REDIS INSTALL AND FILES RIGHT AWAY!!!";
         echo "CRASHING AND BURNING...";
-        exit 1;
+        exit 128;
     fi
-    
+
     echo "Redis shut down successfully, connection closed.";
     return 0;
 }
@@ -60,7 +58,7 @@ function do_connect() {
                 return 0;
             ;;
             'N' | 'n')
-                exit 1;
+                return 1;
             ;;
             *)
                 echo "Invalid option press the Y or the N key.";
@@ -90,7 +88,7 @@ function has_redis_connection() {
     # Ping redis server
     redis_pinged=$(redis-cli ping)
     if [[ $redis_pinged != 'PONG' ]]; then
-        return 1;
+        return 1; # Return error status
     fi
     
     return 0

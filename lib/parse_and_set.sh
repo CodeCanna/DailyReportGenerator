@@ -2,40 +2,47 @@
 
 set -o posix;
 
-# Prints current error
-function echoerr() {
-    printf "%s\n" "$*" >&2;
-}
+# Import redis_connection library
+source ./redis_connection.sh;
 
 function insert_report() {
-    report_name=$1;
-    report_content=$2;
+    if (! has_redis_connection) then
+        create_redis_connection;
+    fi
+
+    report_name=$1; # Key
+    report_content=$2 # Value;
     
     # Verify arguments
-    if [[ $report_name != 0 ]] || [[ $report_content != 0 ]]; then
-        echo "Expecting two arguments got $#";
+    if [[ $report_name == 0 ]] || [[ $report_content == 0 ]]; then
+        echo "Expecting two arguments got $#.  ";
         echo "Arguments expected [Arg1: \$report_name, Arg2: \$report_content]";
         return 1;
     fi
 
-    redis-cli set $report_name $report_content;
-
+    redis-cli set "$report_name" "$report_content";
 
     return 0;
 }
 
-function parse_report() {
+function stringify_report() {
+    # Get report file as an argument
     report_file=$1;
 
-    # Remove bloat
-    sed -e 's/-//g'\
-        -e 's/#//g'\
-        -e 's/^ //g'\
-        -e '/^$/d'\
-        -e '' $report_file > new_file.txt;
+    # Stringify file contents by removing all \n and spaces
+    cat $report_file | tr '\n' ';' | tr ' ' '+' > report_stringified.txt;
 
-    #rm -rf $report_file;
+    report_string=$(cat ./report_stringified.txt);
+    report_name=$(date +%Y-%m-%d);
+
+    # printf "Report Content: $report_string";
+    # printf "Report Name: $report_name";
+
+    # Insert stringified report into redis
+    insert_report "$report_name" "$report_string";
+
+    return 0;
     
 }
 
-parse_report ./test_report.txt
+echo $(stringify_report ./test_report.txt);
