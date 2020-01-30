@@ -120,18 +120,5 @@ elif [ -z $client_bizz_name ]; then
     exit 1;
 fi
 
-# Check if an entry was already made today
-if [ -f $report_file ]; then
-    if ( whiptail --title "Edit Entry?" --yesno "$entry already exists, would you like to edit it?" 12 60 --yes-button "Edit" --no-button "Overwrite" --cancel-button "Cancel" ) then
-        nano $report_file;
-        exit 0;
-    fi
-fi
-
 # Create new report if not exists and overwrite if it does
 create_report;
-
-clear
-
-#echo "Report generated successuflly!"
-#cat $report_path/$report_date.txt;

@@ -26,4 +26,3 @@ if [ "$?" != 0 ]; then
 fi
 
 echo "Uninstall Successfull!";
-exit 0;

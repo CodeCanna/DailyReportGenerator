@@ -13,9 +13,12 @@ function is_root() {
 }
 
 function create_redis_connection() {
-    if (! do_connect) then
-        return 1;
+    do_connect;
+    if [ "$?" != 0 ]; then
+        echo "This program needs Redis to be running.  Exiting!";
+        exit 1;
     fi
+
     # Start a redis instance
     systemctl start redis;
     if [ "$?" != 0 ]; then
@@ -54,7 +57,7 @@ function destroy_redis_connection() {
 
 function do_connect() {
     while true; do
-        read -p "Would you like to connect to Redis? [Y, N]" choice;
+        read -p "Would you like to connect to Redis? [Y, N] " choice;
         
         case $choice in
             'Y' | 'y')
