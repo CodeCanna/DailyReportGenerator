@@ -1,0 +1,25 @@
+gen-report - Generates and stores a Client Report, it uses Redis for storage.
+    FLAGS:
+        -h -- Displays this help text
+
+        -n [CLIENT_NAME] -- Set client name
+
+        -p [CLIENT_PHONE] -- Set client phone number
+
+        -e [CLIENT_EMAIL] -- Set Client email address
+
+        -b -- Set client bussiness name
+
+        -l [REPORT_REDIS_KEY] -- Display the report associated with the REPORT_REDIS_KEY.
+
+        -k -- List all stored REPORT_REDIS_KEYs
+    
+    Example Usage:
+        -To display help: [gen-report -h]
+
+        -To store a basic report: [gen-report -n "Bob Ross" -p "(123)456-7890" -e "some@email.com" -b "Google Inc"]
+
+        -To display a report: [gen-report -l "first_last_2020-01-01"]
+
+Author: CodeCanna
+GitHub: https://github.com/CodeCanna

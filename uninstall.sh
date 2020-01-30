@@ -19,6 +19,7 @@ if [ "$?" != 0 ]; then
     exit 1;
 fi
 
+# Remove gen-report
 rm -f $install_dir/gen-report;
 if [ "$?" != 0 ]; then
     echo "There was a problem removing $install_dir/gen-report";

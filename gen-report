@@ -14,6 +14,12 @@ report_path=/home/awesomepilot/Documents/Work/Notes
 # Get the current report file
 report_file=$report_path/$report_date.txt;
 
+function show_help() {
+    local help_text=$(cat /lib/GenReport/lib/help_doc.txt);
+    echo "$help_text";
+    return 0;
+}
+
 # Parse arguments and set variables
 while getopts "n:p:e:b:l:hk" arg; do
     case $arg in
@@ -30,7 +36,7 @@ while getopts "n:p:e:b:l:hk" arg; do
             client_bizz_name=${OPTARG};
         ;;
         h)
-            cat /usr/bin/help_doc.txt;
+            show_help;
             exit 0
         ;;
         l)
@@ -46,7 +52,7 @@ while getopts "n:p:e:b:l:hk" arg; do
             exit 0;
         ;;
         ?)
-            cat /usr/bin/help_doc.txt;
+            show_help;
             exit 1;
         ;;
         *)
@@ -54,6 +60,8 @@ while getopts "n:p:e:b:l:hk" arg; do
             exit 1;
     esac
 done
+
+
 
 # Create report at ~/$USER/Documents/Work/Notes/
 function create_report() {

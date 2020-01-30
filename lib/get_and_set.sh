@@ -38,7 +38,14 @@ function insert_report() {
 
     local report_string=$(stringify_report "$report_content");
 
-    redis-cli set "$concatted_report_name" "$report_string";
+    # Store data and save it to disk
+    redis-cli set "$concatted_report_name" "$report_string" > /dev/null && redis-cli bgsave > /dev/null;
+    if [ "$?" != 0 ]; then
+        echo "There was a problem saving your reports database";
+        echo "Your data is at rist of loss!";
+        return 1;
+    fi
+
     return 0;
 }
 

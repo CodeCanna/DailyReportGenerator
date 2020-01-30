@@ -13,10 +13,13 @@ fi
 install_dir=/bin;
 
 # Define lib directory
-lib_dir=/lib;
+lib_dir=/lib/GenReport/;
 
-# Create lib directory
-mkdir $lib_dir/GenReport;
+# Create lib directory if it does NOT exist
+if [ ! -d "$lib_dir" ]; then
+    mkdir "$lib_dir";
+fi
+
 
 cp ./gen-report "$install_dir";
 if [ "$?" != 0 ]; then
@@ -24,7 +27,7 @@ if [ "$?" != 0 ]; then
     exit 1;
 fi
 
-cp -r ./lib $lib_dir/GenReport/;
+cp -r ./lib $lib_dir;
 if [ "$?" != 0 ]; then
     echo "There was a problem copying ./lib to $lib_dir";
     exit 1;
