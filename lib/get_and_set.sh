@@ -3,7 +3,7 @@
 set -o posix;
 
 # Import redis_connection library
-source "$PWD/lib/redis_connection.sh";
+source "/lib/GenReport/lib/redis_connection.sh";
 
 function insert_report() {
     # Check for redis connection and if no connection is found then make one
@@ -97,7 +97,7 @@ function get_all_report_keys() {
     
     # Remove /tmp/repkeys.txt
     rm -rf "$repkeys";
-    
+
     echo "${keyarr[@]}";
     return 0;
 }

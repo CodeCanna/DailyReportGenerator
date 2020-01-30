@@ -3,8 +3,8 @@
 # Set posix mode
 set -o posix;
 
-source "$PWD/lib/redis_connection.sh";
-source "$PWD/lib/get_and_set.sh";
+source /lib/GenReport/lib/redis_connection.sh;
+source /lib/GenReport/lib/get_and_set.sh;
 
 report_date=$(date +%Y-%m-%d); # Sets file name later
 

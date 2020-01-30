@@ -9,43 +9,25 @@ if [ $USER != 'root' ];then
     exit 1;
 fi
 
-# Get current working directory
-working_dir=$(pwd);
-
-# Make gen-report executable
-chmod +x $working_dir/gen-report;
-
-# Get currently logged in user
-CURRENT_USER=$(logname);
-
 # Define install directory
-INSTALL_DIR=/usr/bin/;
+install_dir=/bin;
 
-# Define notes directory
-NOTES_DIR=/home/$CURRENT_USER/Documents/Work/Notes/;
+# Define lib directory
+lib_dir=/lib;
 
-# Create notes directory if it doesn't exist
-if [ ! -d $NOTES_DIR ];then
-    # Make notes directory and set owner to normal user
-    mkdir $NOTES_DIR && chown $CURRENT_USER $NOTES_DIR && chmod 777 $NOTES_DIR;
-    if [ $? != 0 ];then
-        echo "There was a problem creating a directory in $NOTES_DIR!  Make sure you have write access to that directory...";
-        exit 1;
-    fi
-fi
+# Create lib directory
+mkdir $lib_dir/GenReport;
 
-# Confirm the install directory exists
-if [ ! -d $INSTALL_DIR ];then
-    echo "The required directory /usr/bin does not exist...that's may mean a big problem for your system...";
+cp ./gen-report "$install_dir";
+if [ "$?" != 0 ]; then
+    echo "There was a problem copying ./gen-report to $install_dir";
     exit 1;
 fi
 
-# Install gen-report
-cp $working_dir/gen-report $INSTALL_DIR && cp ./help_doc.txt $INSTALL_DIR;
-if [ $? != 0 ];then
-    echo "There was a problem installing gen-report.  Make sure you are running this script as root, and the direcory /usr/bin/ exists...";
+cp -r ./lib $lib_dir/GenReport/;
+if [ "$?" != 0 ]; then
+    echo "There was a problem copying ./lib to $lib_dir";
     exit 1;
 fi
 
-echo "Installation Successfull!!"
-exit 0;
+echo "Installed Successuf"
