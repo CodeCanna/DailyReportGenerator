@@ -3,7 +3,7 @@
 set -o posix;
 
 # Import redis_connection library
-source "$PWD/redis_connection.sh";
+source "$PWD/lib/redis_connection.sh";
 
 function insert_report() {
     # Check for redis connection and if no connection is found then make one
@@ -18,17 +18,28 @@ function insert_report() {
     local report_content=$2 # Value;
 
     # Concat date with report name to create the naming convention I want
-    local concated_report_name="$report_name_$DATE";
-    
+    local concatted_report_name="$report_name"'_'"$DATE";
+
     # Verify arguments
     if [[ $report_name == 0 ]] || [[ $report_content == 0 ]]; then
         echo "Expecting two arguments got $#.  ";
         echo "Arguments expected [Arg1: \$report_name, Arg2: \$report_content]";
         return 1;
     fi
+
+    if [ -z $report_content ]; then
+        echo "Something went wrong with inserting report."
+        echo "Report content given: $2";
+        echo "Report content: $report_content";
+
+        exit 1;
+    fi
+
+    local report_string=$(stringify_report "$report_content");
+
+    redis-cli set "$concatted_report_name" "$report_string";
     
-    redis-cli set "$report_name" "$report_content";
-    
+    redis-cli --scan;
     return 0;
 }
 
@@ -142,16 +153,32 @@ function unstringify_report() {
 
     echo "$report_unstringified";
     return 0;
-
-    
 }
 
-# Stringify and inert report
-stringify_report ./test_report.txt
+function get_latest_report() {
+    # Get todays date
+    local date_today=$(date +%Y-%m-%d);
 
-# Show all keys
-get_all_report_keys
+    # Find the date of the latest report
 
-rep=$(get_report test_2020-01-29);
+    # Create array containing all report redis keys
+    local all_report_keys=($(get_all_report_keys));
 
-unstringify_report "$rep";
+    echo "$all_report_keys" > /tmp/keys.txt;
+
+    sed -e 's/_//g' \
+        -e 's/[a-z]//g' /tmp/keys.txt > /tmp/dates.txt;
+
+    # Create report dates array and remove /tmp/dates.txt
+    local report_dates=($(cat /tmp/dates.txt)) && rm -f /tmp/dates.txt;
+
+    # For loop where d is date
+    for d in "${report_dates[@]}"; do
+        if [[ "$d" == "$date_today" ]]; then
+            today_report_key=$(cat /tmp/keys.txt | grep $d);
+            today_report_string=$(redis-cli get "$today_report_key");
+
+            unstringify_report "$today_report_string";
+        fi
+    done
+}

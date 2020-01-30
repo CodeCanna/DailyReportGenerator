@@ -1,12 +1,10 @@
 #!/bin/bash
 
-:'
-This program takes user arguments and then takes two multiline strings as argurments.
-It then generates a report based on that input.
-'
-
 # Set posix mode
 set -o posix;
+
+source "$PWD/lib/redis_connection.sh";
+source "$PWD/lib/get_and_set.sh";
 
 report_date=$(date +%Y-%m-%d); # Sets file name later
 
@@ -16,23 +14,8 @@ report_path=/home/awesomepilot/Documents/Work/Notes
 # Get the current report file
 report_file=$report_path/$report_date.txt;
 
-function list_entries() {
-    # Get entries directory
-    
-
-    # Loop and parse log entries
-    for entry in "$reports_dir"
-    do
-        # Add detected entries to an array
-        entry_list+=("$entry");
-    done
-
-    printf "${entry_list[@]}";
-    exit 0;
-}
-
 # Parse arguments and set variables
-while getopts "n:p:e:b:hl" arg; do
+while getopts "n:p:e:b:l:hk" arg; do
     case $arg in
         n)
             client_name=${OPTARG};
@@ -51,7 +34,16 @@ while getopts "n:p:e:b:hl" arg; do
             exit 0
         ;;
         l)
-            list_entries;
+            entry_to_list=${OPTARG};
+
+            rep_string=$(get_report "$entry_to_list");
+            unstringify_report "$rep_string";
+
+            exit 0;
+        ;;
+        k)
+            get_all_report_keys;
+            exit 0;
         ;;
         ?)
             cat /usr/bin/help_doc.txt;
@@ -79,7 +71,8 @@ clear;
 echo "Enter side notes if any, hit Ctl-D to save>";
 notes=$(</dev/stdin);
 
-cat > $report_path/$report_date.txt << _EOF_
+# cat > $report_path/$report_date.txt << _EOF_
+cat > /tmp/report.txt << _EOF_
 (Client Report)
 ------------------------------------------
 ## Client Information ##
@@ -98,6 +91,18 @@ $work
 $notes
 ------------------------------------------
 _EOF_
+
+report_text=/tmp/report.txt;
+
+# Insert generated report into redis
+insert_report "$client_name" "$report_text";
+if [ "$?" != 0 ]; then
+    echo "There was a problem inserting your report...Make sure Redis is up?";
+    exit 1;
+fi
+
+rm -rf "$report_text";
+return 0;
 }
 
 # Check if all arguments are accounted for
@@ -128,5 +133,5 @@ create_report;
 
 clear
 
-echo "Report generated successuflly!"
-cat $report_path/$report_date.txt;
+#echo "Report generated successuflly!"
+#cat $report_path/$report_date.txt;
