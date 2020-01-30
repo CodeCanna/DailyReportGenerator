@@ -25,6 +25,9 @@ function create_redis_connection() {
         # Return failure code
         return 1;
     fi
+
+    # Give time for redis to start
+    sleep 0.5;
     
     echo "Redis Started Sucessfully!";
     return 0;

@@ -8,6 +8,7 @@ source "/lib/GenReport/lib/redis_connection.sh";
 function insert_report() {
     # Check for redis connection and if no connection is found then make one
     if (! has_redis_connection) then
+        echo "Who?";
         create_redis_connection;
     fi
     
@@ -38,8 +39,6 @@ function insert_report() {
     local report_string=$(stringify_report "$report_content");
 
     redis-cli set "$concatted_report_name" "$report_string";
-    
-    redis-cli --scan;
     return 0;
 }
 
