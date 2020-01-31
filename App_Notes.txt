@@ -1,5 +1,0 @@
-Ideas:
-
-1. make it a command that fills in the info for me ex. gen-report -n MechenbierIt -n 2022222222
-2. make it check for duplicate entries
-3. 
