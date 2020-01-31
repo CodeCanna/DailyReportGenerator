@@ -63,11 +63,29 @@ function get_all_report_keys() {
     rm -rf "$repkeys";
 
     # Loop through keys and display them on their own line
-    for k in ${keyarr[@]}; do
-        echo "$k";
-    done
+    #for k in ${keyarr[@]}; do
+    #    echo "$k";
+    #done
+
+    echo "${keyarr[@]}";
 
     return 0;
+}
+
+# Check if report exists
+function report_exists() {
+    report_to_check=$1;
+
+    # Get all currently stored keys
+    keys_to_check+=($(get_all_report_keys));
+
+    for k in "${keys_to_check[@]}"; do
+        if [ "$k" == "$report_to_check" ]; then
+            return 0;
+        fi
+    done
+
+    return 1; 
 }
 
 # Grab the latest report from the database

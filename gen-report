@@ -22,13 +22,13 @@ report_path=/home/awesomepilot/Documents/Work/Notes
 report_file=$report_path/$report_date.txt;
 
 function show_help() {
-    local help_text=$(cat /lib/GenReport/lib/help_doc.txt);
+    local help_text=$(cat /lib/GenReport/help_doc.txt);
     echo "$help_text";
     return 0;
 }
 
 # Parse arguments and set variables
-while getopts "n:p:e:b:l:hk" arg; do
+while getopts "n:p:e:b:l:d:hkq" arg; do
     case "$arg" in
         n)
             client_name=${OPTARG};
@@ -48,14 +48,22 @@ while getopts "n:p:e:b:l:hk" arg; do
         ;;
         l)
             entry_to_list=${OPTARG};
-
+            
             rep_string=$(get_report "$entry_to_list");
             unstringify_report "$rep_string";
-
+            
             exit 0;
         ;;
         k)
             get_all_report_keys;
+            exit 0;
+        ;;
+        d)
+            edit_report ${OPTARG};
+            exit 0;
+        ;;
+        q)
+            get_latest_report;
             exit 0;
         ;;
         ?)
@@ -68,25 +76,28 @@ while getopts "n:p:e:b:l:hk" arg; do
     esac
 done
 
+function create_work_notes() {
+    # Clear screen
+    clear;
+    
+    # Get work notes
+    echo "Enter work notes, hit Ctl-D to save>";
+    work=$(</dev/stdin);
+}
+
+function create_side_notes() {
+    # Clear screen
+    clear;
+    
+    # Set side notes
+    echo "Enter side notes if any, hit Ctl-D to save>";
+    notes=$(</dev/stdin);
+}
 
 
 # Create report at ~/$USER/Documents/Work/Notes/
 function create_report() {
-# Clear screen
-clear;
-
-# Get work notes
-echo "Enter work notes, hit Ctl-D to save>";
-work=$(</dev/stdin);
-
-# Clear screen
-clear;
-
-# Set side notes
-echo "Enter side notes if any, hit Ctl-D to save>";
-notes=$(</dev/stdin);
-
-# cat > $report_path/$report_date.txt << _EOF_
+    # cat > $report_path/$report_date.txt << _EOF_
 cat > /tmp/report.txt << _EOF_
 (Client Report - Date: $report_date)
 ------------------------------------------
@@ -106,34 +117,36 @@ $work
 $notes
 ------------------------------------------
 _EOF_
-
-report_text=/tmp/report.txt;
-
-# Insert generated report into redis
-set_report "$client_name" "$report_text";
-if [ "$?" != 0 ]; then
-    echo "There was a problem inserting your report...Make sure Redis is up?";
-    exit 1;
-fi
-
-rm -rf "$report_text";
-return 0;
+    
+    report_text=/tmp/report.txt;
+    
+    # Insert generated report into redis
+    set_report "$client_name" "$report_text";
+    if [ "$?" != 0 ]; then
+        echo "There was a problem inserting your report...Make sure Redis is up?";
+        exit 1;
+    fi
+    
+    rm -rf "$report_text";
+    return 0;
 }
 
 # Check if all arguments are accounted for
 if [ -z $client_name ]; then
     echo "You cannot leave Client Name field empty...";
     exit 1;
-elif [ -z $client_phone ]; then
+    elif [ -z $client_phone ]; then
     echo "You cannot leave Client Phone field empty...";
     exit 1;
-elif [ -z $client_email ]; then
+    elif [ -z $client_email ]; then
     echo "You cannot leave Client Email field empty...";
     exit 1;
-elif [ -z $client_bizz_name ]; then
+    elif [ -z $client_bizz_name ]; then
     echo "You cannot leave Client Bussiness Name field empty...";
     exit 1;
 fi
 
 # Create new report if not exists and overwrite if it does
+create_work_notes;
+create_side_notes;
 create_report;
