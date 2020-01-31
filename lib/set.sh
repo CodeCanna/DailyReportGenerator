@@ -83,6 +83,10 @@ function stringify_report() {
         return 1;
     fi
 
+    # Remove temporary files
+    rm -f /tmp/report_stringified.txt;
+
+    # Display result
     echo "$report_string";
     return 0;
 }
@@ -110,6 +114,8 @@ function unstringify_report() {
         echo "There was a problem removing temporary file $report_unstringified_file, make sure you have correct permissions...";
         return 1;
     fi
+
+    rm -f /tmp/report_stringified.txt;
 
     echo "$report_unstringified";
     return 0;
