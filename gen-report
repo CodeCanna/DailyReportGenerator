@@ -88,7 +88,7 @@ notes=$(</dev/stdin);
 
 # cat > $report_path/$report_date.txt << _EOF_
 cat > /tmp/report.txt << _EOF_
-(Client Report)
+(Client Report - Date: $report_date)
 ------------------------------------------
 ## Client Information ##
 ------------------------------------------

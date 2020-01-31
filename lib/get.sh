@@ -62,7 +62,11 @@ function get_all_report_keys() {
     # Remove /tmp/repkeys.txt
     rm -rf "$repkeys";
 
-    echo "${keyarr[@]}";
+    # Loop through keys and display them on their own line
+    for k in ${keyarr[@]}; do
+        echo "$k";
+    done
+
     return 0;
 }
 

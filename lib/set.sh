@@ -20,6 +20,19 @@ function set_report() {
     # Concat date with report name to create the naming convention I want
     local concatted_report_name="$report_name"'_'"$DATE";
 
+    echo "$concatted_report_name" > /tmp/rpname.txt;
+
+    concatted_report_name=/tmp/rpname.txt;
+
+    # Remove spaces from report name and replace with underscores
+    sed 's/ /_/g' "$concatted_report_name" > /tmp/rp_nospace_name.txt;
+
+    concatted_nospace_report_name=$(cat /tmp/rp_nospace_name.txt);
+
+    # Remove temporary files
+    rm -f /tmp/rpname.txt;
+    rm -f /tmp/rp_nospace_name.txt;
+
     # Verify arguments
     if [[ $report_name == 0 ]] || [[ $report_content == 0 ]]; then
         echo "Expecting two arguments got $#.  ";
@@ -39,7 +52,7 @@ function set_report() {
     local report_string=$(stringify_report "$report_content");
 
     # Store data and save it to disk
-    redis-cli set "$concatted_report_name" "$report_string" > /dev/null && redis-cli bgsave > /dev/null;
+    redis-cli set "$concatted_nospace_report_name" "$report_string" > /dev/null && redis-cli bgsave > /dev/null;
     if [ "$?" != 0 ]; then
         echo "There was a problem saving your reports database";
         echo "Your data is at rist of loss!";
