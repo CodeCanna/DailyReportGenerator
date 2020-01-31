@@ -2,16 +2,6 @@
 
 set -o posix;
 
-# Is current user root?
-function is_root() {
-    if [ "$USER" != 'root' ]; then
-        # Not root return error
-        return 1;
-    fi
-    # Root return OK
-    return 0;
-}
-
 function create_redis_connection() {
     do_connect;
     if [ "$?" != 0 ]; then
@@ -88,9 +78,3 @@ function do_disconnect() {
         esac
     done
 }
-
-# Make sure script runs as root.
-if [ "$USER" != 'root' ]; then
-    echo "This script must be ran as root. [redis_connection.sh]";
-    exit 1;
-fi

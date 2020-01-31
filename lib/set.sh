@@ -2,19 +2,12 @@
 
 set -o posix;
 
-# Make sure script runs as root.
-if [ "$USER" != 'root' ]; then
-    echo "This script must be ran as root. [redis_connection.sh]";
-    exit 1;
-fi
-
 source /lib/GenReport/check_redis_connection.sh;
 source /lib/GenReport/redis_connection.sh;
 
 function set_report() {
     # Check for redis connection and if no connection is found then make one
     if (! has_redis_connection) then
-        echo "Who?";
         create_redis_connection;
     fi
     

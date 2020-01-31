@@ -10,10 +10,10 @@ fi
 install_dir=/bin;
 
 # Define lib directory
-lib_dir=/lib;
+lib_dir=/lib/GenReport;
 
 # Remove library
-rm -rf $lib_dir/GenReport;
+rm -rf $lib_dir;
 if [ "$?" != 0 ]; then
     echo "There was a problem removing $lib_dir/GenReport";
     exit 1;
