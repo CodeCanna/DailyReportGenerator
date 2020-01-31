@@ -89,17 +89,6 @@ function do_disconnect() {
     done
 }
 
-# Checks the connection to Redis
-function has_redis_connection() {
-    # Ping redis server
-    redis_pinged=$(redis-cli ping)
-    if [[ $redis_pinged != 'PONG' ]]; then
-        return 1; # Return error status
-    fi
-    
-    return 0
-}
-
 # Make sure script runs as root.
 if [ "$USER" != 'root' ]; then
     echo "This script must be ran as root. [redis_connection.sh]";

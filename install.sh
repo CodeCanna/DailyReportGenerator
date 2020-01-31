@@ -27,7 +27,7 @@ if [ "$?" != 0 ]; then
     exit 1;
 fi
 
-cp -r ./lib $lib_dir;
+cp -r ./lib/* $lib_dir;
 if [ "$?" != 0 ]; then
     echo "There was a problem copying ./lib to $lib_dir";
     exit 1;

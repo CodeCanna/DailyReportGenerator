@@ -3,8 +3,15 @@
 # Set posix mode
 set -o posix;
 
-source /lib/GenReport/lib/redis_connection.sh;
-source /lib/GenReport/lib/get_and_set.sh;
+
+
+#source /lib/GenReport/redis_connection.sh;
+
+#source /lib/GenReport/get_and_set.sh;
+
+source /lib/GenReport/get.sh;
+source /lib/GenReport/set.sh;
+
 
 report_date=$(date +%Y-%m-%d); # Sets file name later
 
@@ -22,7 +29,7 @@ function show_help() {
 
 # Parse arguments and set variables
 while getopts "n:p:e:b:l:hk" arg; do
-    case $arg in
+    case "$arg" in
         n)
             client_name=${OPTARG};
         ;;
@@ -103,7 +110,7 @@ _EOF_
 report_text=/tmp/report.txt;
 
 # Insert generated report into redis
-insert_report "$client_name" "$report_text";
+set_report "$client_name" "$report_text";
 if [ "$?" != 0 ]; then
     echo "There was a problem inserting your report...Make sure Redis is up?";
     exit 1;
