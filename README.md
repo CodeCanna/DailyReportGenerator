@@ -8,4 +8,4 @@ This is a Client Report generator that generates a report containing client info
     <li>cat 8.31 or greater</li>
   </ul>
   
-  version 2.0.0
+  <b>version 2.0.0</b>
