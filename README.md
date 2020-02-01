@@ -3,9 +3,9 @@ This is a Client Report generator that generates a report containing client info
 
 ## Dependencies:
   <ul>
-    <li>Redis 5.0.7</li>
-    <li>nano 4.7</li>
-    <li>cat 8.31</li>
+    <li>Redis 5.0.7 or greater</li>
+    <li>nano 4.7 or greater</li>
+    <li>cat 8.31 or greater</li>
   </ul>
   
   version 2.0.0
