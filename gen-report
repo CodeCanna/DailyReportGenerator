@@ -22,6 +22,7 @@ report_path=/home/awesomepilot/Documents/Work/Notes
 report_file=$report_path/$report_date.txt;
 
 function show_help() {
+    clear;
     local help_text=$(cat /lib/GenReport/help_doc.txt);
     echo "$help_text";
     return 0;
