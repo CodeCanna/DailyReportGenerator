@@ -72,6 +72,32 @@ function set_report() {
     return 0;
 }
 
+function delete_report() {
+    report_to_delete_key=$1;
+
+    # If no redis connection is detected, create one
+    if (! has_redis_connection) then
+        create_redis_connection;
+    fi
+
+    report_exists "$report_to_delete_key";
+    if [ "$?" != 0 ]; then
+        echo "Report doesn't exist...";
+        return 1;
+    fi
+
+    # Get the report the delete
+    get_report "$report_to_delete_key" > /tmp/rpstring.txt;
+    if [ "$?" != 0 ]; then
+        return 1;
+    fi
+
+    # Delete report
+    redis-cli del "$report_to_delete_key" > /dev/null;
+
+    return 0;
+}
+
 function edit_report() {
     report_to_edit=$1;
     

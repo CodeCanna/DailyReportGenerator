@@ -13,6 +13,10 @@ gen-report - Generates and stores a Client Report, it uses Redis for storage.
         -l [REPORT_REDIS_KEY] -- Display the report associated with the REPORT_REDIS_KEY.
 
         -k -- List all stored REPORT_REDIS_KEYs
+
+        -d [REPORT_KEY_TO_EDIT] -- Allows you to edit a report in nano
+
+        -q -- Get a list of today's reports
     
     Example Usage:
         -To display help: [gen-report -h]

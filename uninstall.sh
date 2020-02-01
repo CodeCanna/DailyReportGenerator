@@ -6,24 +6,3 @@ if [ $USER != 'root' ];then
     exit 1;
 fi
 
-# Define install directory
-install_dir=/bin;
-
-# Define lib directory
-lib_dir=/lib/GenReport;
-
-# Remove library
-rm -rf $lib_dir;
-if [ "$?" != 0 ]; then
-    echo "There was a problem removing $lib_dir/GenReport";
-    exit 1;
-fi
-
-# Remove gen-report
-rm -f $install_dir/gen-report;
-if [ "$?" != 0 ]; then
-    echo "There was a problem removing $install_dir/gen-report";
-    exit 1;
-fi
-
-echo "Uninstall Successfull!";
