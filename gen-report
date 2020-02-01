@@ -15,7 +15,7 @@ source /lib/GenReport/set.sh;
 
 report_date=$(date +%Y-%m-%d); # Sets file name later
 
-# Set report path
+# Set report pathc
 report_path=/home/awesomepilot/Documents/Work/Notes
 
 # Get the current report file
@@ -23,7 +23,10 @@ report_file=$report_path/$report_date.txt;
 
 function show_help() {
     clear;
-    local help_text=$(cat /lib/GenReport/help_doc.txt);
+    # Declare vars
+    local help_text;
+    help_text=$(cat /usr/share/help_doc.txt);
+
     echo "$help_text";
     return 0;
 }

@@ -4,7 +4,7 @@
 set -o posix;
 
 # Check if script is ran as root
-if [ $USER != 'root' ];then
+if [ "$USER" != 'root' ];then
     echo "This script must be ran as root...";
     exit 1;
 fi
@@ -18,6 +18,9 @@ install_dir=/bin;
 # Define GenReport library directory
 lib_dir=/lib/GenReport/;
 
+# Define help_doc directory
+help_dir=/usr/share;
+
 function install_genreport() {
     echo "Starting install";
 
@@ -26,8 +29,7 @@ function install_genreport() {
         echo "Creating $lib_dir";
         sleep 0.5;
         
-        mkdir --parents "$lib_dir";
-        if [ "$?" != 0 ]; then
+        if (! mkdir --parents "$lib_dir") then
             echo "Couldn't create $lib_dir";
             exit 1;
         fi
@@ -37,8 +39,7 @@ function install_genreport() {
         echo "Creating directory $exp_dir";
         sleep 0.5;
         
-        mkdir --parents "$exp_dir";
-        if [ "$?" != 0 ]; then
+        if (! mkdir --parents "$exp_dir") then
             echo "Problem creating directory $exp_dir";
         fi
     fi
@@ -46,8 +47,7 @@ function install_genreport() {
     # Install GenReport
     echo "Installing GenReport at $install_dir";
     sleep 0.5;
-    cp ./gen-report "$install_dir";
-    if [ "$?" != 0 ]; then
+    if (! cp ./gen-report "$install_dir") then
         echo "There was a problem copying ./gen-report to $install_dir";
         exit 1;
     fi
@@ -55,9 +55,16 @@ function install_genreport() {
     # Install GenReport Library
     echo "Installing GenReport/lib at $lib_dir";
     sleep 0.5;
-    cp -r ./lib/* $lib_dir;
-    if [ "$?" != 0 ]; then
+    if (! cp -r ./lib/* $lib_dir) then
         echo "There was a problem copying ./lib to $lib_dir";
+        exit 1;
+    fi
+
+    # Install help doc
+    echo "Copying ./help_doc.txt to $help_dir";
+    sleep 0.5;
+    if (! cp ./help_doc.txt "$help_dir") then
+        echo "There was a problem copying ./help_doc.txt to $help_dir";
         exit 1;
     fi
     
@@ -66,23 +73,34 @@ function install_genreport() {
 
 function uninstall_genreport() {    
     # Remove export directory
-    rm -rf $exp_dir && echo "Removing $exp_dir" && sleep 0.5;
-    if [ "$?" != 0 ]; then 
+    echo "Removing $exp_dir";
+    sleep 0.5;
+    if (! rm -rf "$exp_dir") then
         echo "There was a problem removing $exp_dir";
         exit 1;
     fi
     
     # Remove library
-    rm -rf $lib_dir && echo "Removing $lib_dir" && sleep 0.5;
-    if [ "$?" != 0 ]; then
+    echo "Removing $lib_dir";
+    sleep 0.5;
+    if (! rm -rf "$lib_dir") then
         echo "There was a problem removing $lib_dir/GenReport";
         exit 1;
     fi
     
     # Remove gen-report
-    rm -f $install_dir/gen-report && echo "Uninstalling GenReport" && sleep 0.5;
-    if [ "$?" != 0 ]; then
+    echo "Uninstalling GenReport";
+    sleep 0.5;
+    if (! rm -f "$install_dir/gen-report") then
         echo "There was a problem removing $install_dir/gen-report";
+        exit 1;
+    fi
+
+    # Remove help_doc
+    echo "Removing $help_dir/help_doc.txt";
+    sleep 0.5;
+    if (! rm -f "$help_dir"/help_doc.txt) then
+        echo "Couldn't remove $help_dir/help_doc.txt";
         exit 1;
     fi
     
@@ -94,7 +112,7 @@ case $1 in
         uninstall_genreport;
         exit 0;
     ;;
-    '')
+    '' | ' ')
         install_genreport;
         exit 0;
     ;;
