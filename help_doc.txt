@@ -1,6 +1,6 @@
-gen-report - Generates and stores a Client Report, it uses Redis for storage.
+﻿gen-report - Generates and stores a Client Report, it uses Redis for storage.
     FLAGS:
-        -h -- Displays this help text
+        --help -- Displays this help text
 
         -n [CLIENT_NAME] -- Set client name
 
@@ -8,24 +8,24 @@ gen-report - Generates and stores a Client Report, it uses Redis for storage.
 
         -e [CLIENT_EMAIL] -- Set Client email address
 
-        -b -- Set client bussiness name
+        -b -- [CLIENT_BUSINESS_NAME] Set client bussiness name
+
+        -h -- [CLIENT_HOURS] Set Client Hours
+
+        -t [REPORT_KEY_TO_EDIT] – Edits a report based on it’s Redis key
+
+        -x [REPORT_TO_EXPORT] -- Export specified report as a plain text file
 
         -l [REPORT_REDIS_KEY] -- Display the report associated with the REPORT_REDIS_KEY.
 
-        -k -- List all stored REPORT_REDIS_KEYs
-
-        -d [REPORT_KEY_TO_EDIT] -- Delete report by REPORT_KEY_TO_EDIT
+        -k -- List all stored Redis keys
 
         -q -- Get a list of today's reports
 
-        -t [REPORT_KEY_TO_EDIT] -- Edit report by REPORT_KEY_TO_EDIT
-
-        -x [REPORT_TO_EXPORT] -- Export specified report as a plain text file
-    
     Example Usage:
-        -To display help: [gen-report -h]
+        -To display help: [gen-report --help]
 
-        -To store a basic report: [gen-report -n "Bob Ross" -p "(123)456-7890" -e "some@email.com" -b "Google Inc"]
+        -To store a basic report: [gen-report -n "Bob Ross" -p "(123)456-7890" -e "some@email.com" -b "Google Inc" -h "7.4"]
 
         -To display a report: [gen-report -l "first_last_2020-01-01"]
 

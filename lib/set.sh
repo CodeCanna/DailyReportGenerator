@@ -65,7 +65,7 @@ function set_report() {
     redis-cli set "$concatted_nospace_report_name" "$report_string" > /dev/null && redis-cli bgsave > /dev/null;
     if [ "$?" != 0 ]; then
         echo "There was a problem saving your reports database";
-        echo "Your data is at rist of loss!";
+        echo "Your data is at risk of loss!";
         return 1;
     fi
     

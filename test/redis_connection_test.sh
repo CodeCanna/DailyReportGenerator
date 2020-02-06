@@ -9,8 +9,8 @@ source ../lib/redis_connection.sh;
 if (! has_redis_connection) then
     # If NOT connected to redis ask to connect
     create_redis_connection;
-    if [ "$?" != 0 ]; then
-        echo "Test Failed: Couldn't Connect to Redis...";
+    if [ "$?" != 0 ] && [ "$?" == 3]; then
+        echo "Redis couldn't start redis correctly...";
         exit 1;
     fi
 
