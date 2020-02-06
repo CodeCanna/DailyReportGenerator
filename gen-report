@@ -3,12 +3,6 @@
 # Set posix mode
 set -o posix;
 
-
-
-#source /lib/GenReport/redis_connection.sh;
-
-#source /lib/GenReport/get_and_set.sh;
-
 source /lib/GenReport/get.sh;
 source /lib/GenReport/set.sh;
 
