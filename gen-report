@@ -26,7 +26,7 @@ function show_help() {
     # Declare vars
     local help_text;
     help_text=$(cat /usr/share/help_doc.txt);
-
+    
     echo "$help_text";
     return 0;
 }
@@ -34,20 +34,20 @@ function show_help() {
 # A function to export the report as a text file
 function export_report() {
     local report_to_export=$1;
-
+    
     report_exists "$report_to_export";
     if [ "$?" == 1 ]; then
         echo "That report doesn't exist.  Nothing exported...";
         exit 1;
     fi
-
+    
     local report_string=$(get_report "$report_to_export");
-
+    
     unstringify_report "$report_string" > /home/$USER/Documents/Work/$report_to_export.txt;
 }
 
 # Parse arguments and set variables
-while getopts "n:p:e:b:l:t:d:x:hkq" arg; do
+while getopts "n:p:e:b:l:t:d:x:h:-:kq" arg; do
     case "$arg" in
         n)
             client_name=${OPTARG};
@@ -62,8 +62,7 @@ while getopts "n:p:e:b:l:t:d:x:hkq" arg; do
             client_bizz_name=${OPTARG};
         ;;
         h)
-            show_help;
-            exit 0
+            client_hours=${OPTARG};
         ;;
         l)
             entry_to_list=${OPTARG};
@@ -95,6 +94,17 @@ while getopts "n:p:e:b:l:t:d:x:hkq" arg; do
         x)
             export_report ${OPTARG};
             exit 0;
+        ;;
+        -)
+            case "${OPTARG}" in
+                'help')
+                    show_help;
+                    exit 0;
+                ;;
+                *)
+                    echo "Something is wrong with your print help case statement...";
+                    exit 1;
+            esac
         ;;
         ?)
             show_help;
@@ -137,6 +147,7 @@ Client Name: $client_name
 Client Phone: $client_phone
 Client Email: $client_email
 Client Business: $client_bizz_name
+Client Hours: $client_hours
 ------------------------------------------
 ## Work Performed ##
 ------------------------------------------
@@ -162,17 +173,20 @@ _EOF_
 }
 
 # Check if all arguments are accounted for
-if [ -z $client_name ]; then
+if [ -z "$client_name" ]; then
     echo "You cannot leave Client Name field empty...";
     exit 1;
-    elif [ -z $client_phone ]; then
+    elif [ -z "$client_phone" ]; then
     echo "You cannot leave Client Phone field empty...";
     exit 1;
-    elif [ -z $client_email ]; then
+    elif [ -z "$client_email" ]; then
     echo "You cannot leave Client Email field empty...";
     exit 1;
-    elif [ -z $client_bizz_name ]; then
+    elif [ -z "$client_bizz_name" ]; then
     echo "You cannot leave Client Bussiness Name field empty...";
+    exit 1;
+    elif [ -z "$client_hours" ]; then
+    echo "You cannot leave Client Hours field empty...";
     exit 1;
 fi
 
