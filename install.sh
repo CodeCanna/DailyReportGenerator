@@ -39,7 +39,7 @@ function install_genreport() {
         echo "Creating directory $exp_dir";
         sleep 0.5;
         
-        if (! mkdir --parents "$exp_dir") then
+        if (! mkdir --parents "$exp_dir" && chown "$SUDO_USER" "$exp_dir") then
             echo "Problem creating directory $exp_dir";
         fi
     fi

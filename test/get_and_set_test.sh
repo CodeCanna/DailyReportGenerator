@@ -31,7 +31,6 @@ function test_set_and_get() {
     value_to_test_unstringified=$(unstringify_report "$value_to_test_stringified");
     
     if [ "$value_to_test_unstringified" != "$test_value" ]; then
-        echo "set_test: FAILED!";
         return 1;
     fi
 
@@ -41,7 +40,6 @@ function test_set_and_get() {
         echo "Problem removing test report from Redis...";
         return 1;
     fi
-    
-    echo "set_test: PASSED!";
+
     return 0;
 }
