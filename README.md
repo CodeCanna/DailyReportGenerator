@@ -8,4 +8,7 @@ This is a Client Report generator that generates a report containing client info
     <li>cat 8.31 or greater</li>
   </ul>
   
-  <b>version 2.0.0</b>
+  <p><b>version 2.0.0</b></p>
+  <p><b>Note: Currently only compatible with SystemD init.</b></p>
+  
+  Learn more at the wiki: https://github.com/CodeCanna/GenReport/wiki
