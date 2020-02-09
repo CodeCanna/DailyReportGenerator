@@ -107,18 +107,5 @@ function get_latest_report() {
     # Create report dates array and remove /tmp/dates.txt
     local report_dates=($(cat /tmp/dates.txt)) && rm -f /tmp/dates.txt;
 
-    echo "${report_dates[@]}"
-
-    # A test exit
-    exit 0;
-
-    # For loop where d is date
-    for d in "${report_dates[@]}"; do
-        if [[ "$d" == "$date_today" ]]; then
-            today_report_key=$(cat /tmp/keys.txt | grep $d);
-            today_report_string=$(redis-cli get "$today_report_key");
-
-            unstringify_report "$today_report_string";
-        fi
-    done
+    echo "${report_dates[@]}";
 }
