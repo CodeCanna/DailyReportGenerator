@@ -2,6 +2,8 @@
     FLAGS:
         --help -- Displays this help text
 
+        --test -- Run the test suite to ensure correct functionality
+
         -n [CLIENT_NAME] -- Set client name
 
         -p [CLIENT_PHONE] -- Set client phone number
@@ -12,7 +14,7 @@
 
         -h -- [CLIENT_HOURS] Set Client Hours
 
-        -t [REPORT_KEY_TO_EDIT] – Edits a report based on it’s Redis key
+        -t [REPORT_KEY_TO_EDIT] -- Edits a report based on it’s Redis key
 
         -x [REPORT_TO_EXPORT] -- Export specified report as a plain text file
 
