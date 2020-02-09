@@ -11,12 +11,11 @@ if [ ! -f /bin/gen-report ]; then
 fi
 
 # Import tests
-source ./redis_connection_test.sh;
-source ./get_and_set_test.sh;
+source /lib/GenReport/test/redis_connection_test.sh;
+source /lib/GenReport/test/get_and_set_test.sh;
 
 # Run the Redis connection test
-test_redis_connection;
-if [ "$?" != 0 ]; then
+if (! test_redis_connection) then
     echo "master_test: FAIL!";  # Echo Failed results
     exit 1;
 fi
@@ -24,8 +23,7 @@ fi
 echo "redis_connection_test: PASS!";
 
 # Run the set and get test
-test_set_and_get;
-if [ "$?" != 0 ]; then
+if (! test_set_and_get) then
     echo "master_test: FAIL!";  # Echo Failed results
     exit 1;
 fi

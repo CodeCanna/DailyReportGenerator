@@ -3,7 +3,7 @@
 set -o posix
 
 # Import set library
-source ../lib/set.sh;
+source /lib/GenReport/set.sh;
 
 function test_set_and_get() {
     ## Start Test ##

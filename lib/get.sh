@@ -101,10 +101,16 @@ function get_latest_report() {
     echo "$all_report_keys" > /tmp/keys.txt;
 
     sed -e 's/_//g' \
-        -e 's/[a-z]//g' /tmp/keys.txt > /tmp/dates.txt;
+        -e 's/[a-z]//g' \
+        -e 's/[A-Z]//g' /tmp/keys.txt > /tmp/dates.txt;
 
     # Create report dates array and remove /tmp/dates.txt
     local report_dates=($(cat /tmp/dates.txt)) && rm -f /tmp/dates.txt;
+
+    echo "${report_dates[@]}"
+
+    # A test exit
+    exit 0;
 
     # For loop where d is date
     for d in "${report_dates[@]}"; do
