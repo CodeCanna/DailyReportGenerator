@@ -111,7 +111,7 @@ function uninstall_genreport() {
         echo "Couldn't remove $help_dir/help_doc.txt";
         exit 1;
     fi
-
+    
     return 0;
 }
 
@@ -122,17 +122,21 @@ case $1 in
             echo "Uninstallation Failed...";
             exit 1;
         fi
-
+        
         # Exit sucessfully
         echo "Uninstallation Sucessful!!";
         exit 0;
+    ;;
+    '-h' | '--help')
+        echo "Run [sudo ./install.sh] to install GenReport.";
+        echo "Run [sudo ./install.sh --uninstall] to uninstall GenReport";
     ;;
     '' | ' ')
         if (! install_genreport) then
             echo "Installation Failed...";
             exit 1;
         fi
-
+        
         echo "Installation Sucessful!!"
         exit 0;
     ;;
