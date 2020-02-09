@@ -95,6 +95,14 @@ while getopts "n:p:e:b:l:t:d:x:h:-:kq" arg; do
                     show_help;
                     exit 0;
                 ;;
+                'test')
+                    if (! sh /lib/GenReport/test/master_test.sh) then  # Run tests
+                        echo "Failed to start tests...make sure the installation went smoothly!";
+                        exit 1;
+                    fi
+
+                    exit 0;
+                ;;
                 *)
                     echo "Something is wrong with your print help case statement...";
                     exit 1;

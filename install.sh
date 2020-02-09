@@ -16,7 +16,7 @@ exp_dir=/home/$SUDO_USER/Documents/Work/Notes;
 install_dir=/bin;
     
 # Define GenReport library directory
-lib_dir=/lib/GenReport/;
+lib_dir=/lib/GenReport;
 
 # Define help_doc directory
 help_dir=/usr/share;
@@ -43,28 +43,36 @@ function install_genreport() {
             echo "Problem creating directory $exp_dir";
         fi
     fi
-    
-    # Install GenReport
-    echo "Installing GenReport at $install_dir";
-    sleep 0.5;
-    if (! cp ./gen-report "$install_dir") then
-        echo "There was a problem copying ./gen-report to $install_dir";
-        exit 1;
-    fi
-    
+
     # Install GenReport Library
-    echo "Installing GenReport/lib at $lib_dir";
+    echo "Installing GenReport/lib";
     sleep 0.5;
     if (! cp -r ./lib/* $lib_dir) then
         echo "There was a problem copying ./lib to $lib_dir";
         exit 1;
     fi
 
+    # Install test library
+    echo "Installing GenReport/test";
+    sleep 0.5
+    if(! cp -r ./test "$lib_dir") then
+        echo "There was a problem installing the test library...";
+        exit 1;
+    fi
+
     # Install help doc
-    echo "Copying ./help_doc.txt to $help_dir";
+    echo "Installing GenReport/help_doc";
     sleep 0.5;
     if (! cp ./help_doc.txt "$help_dir") then
         echo "There was a problem copying ./help_doc.txt to $help_dir";
+        exit 1;
+    fi
+    
+    # Install GenReport
+    echo "Installing GenReport";
+    sleep 0.5;
+    if (! cp ./gen-report "$install_dir") then
+        echo "There was a problem copying ./gen-report to $install_dir";
         exit 1;
     fi
     
