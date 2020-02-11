@@ -96,7 +96,7 @@ while getopts "n:p:e:b:l:t:d:x:h:-:kq" arg; do
                     exit 0;
                 ;;
                 'test')
-                    if (! sh /lib/GenReport/test/master_test.sh) then  # Run tests
+                    if (! bash /lib/GenReport/test/master_test.sh) then  # Run tests
                         echo "Failed to start tests...make sure the installation went smoothly!";
                         exit 1;
                     fi
