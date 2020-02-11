@@ -37,7 +37,7 @@ function export_report() {
     
     local report_string=$(get_report "$report_to_export");
     
-    unstringify_report "$report_string" > /home/$USER/Documents/Work/$report_to_export.txt;
+    unstringify_report "$report_string" > /home/$USER/Documents/Notes/$report_to_export.txt;
 }
 
 # Parse arguments and set variables
