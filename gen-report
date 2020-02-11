@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # Set posix mode
+
 set -o posix;
 
 # Import Libraries
