@@ -3,13 +3,14 @@
 # Set posix mode
 set -o posix;
 
+# Import Libraries
 source /lib/GenReport/get.sh;
 source /lib/GenReport/set.sh;
 
-
+# Get todays date for file naming convention
 report_date=$(date +%Y-%m-%d); # Sets file name later
 
-# Set report pathc
+# Set report path
 report_path=/home/awesomepilot/Documents/Work/Notes
 
 # Get the current report file
@@ -44,19 +45,19 @@ function export_report() {
 while getopts "n:p:e:b:l:t:d:x:h:-:kq" arg; do
     case "$arg" in
         n)
-            client_name=${OPTARG};
+            client_name=${OPTARG}; # Set Client Name
         ;;
         p)
-            client_phone=${OPTARG};
+            client_phone=${OPTARG}; # Set Client Phone
         ;;
         e)
-            client_email=${OPTARG};
+            client_email=${OPTARG}; # Set Client Email
         ;;
         b)
-            client_bizz_name=${OPTARG};
+            client_bizz_name=${OPTARG}; # Set Client Business Name
         ;;
         h)
-            client_hours=${OPTARG};
+            client_hours=${OPTARG}; # Set Client Hours
         ;;
         l)
             entry_to_list=${OPTARG};
@@ -96,7 +97,7 @@ while getopts "n:p:e:b:l:t:d:x:h:-:kq" arg; do
                     exit 0;
                 ;;
                 'test')
-                    if (! bash /lib/GenReport/test/master_test.sh) then  # Run tests
+                    if (! bash /lib/GenReport/test/master_test.sh) then  # Run tests, be sure to run with bash and not sh
                         echo "Failed to start tests...make sure the installation went smoothly!";
                         exit 1;
                     fi
