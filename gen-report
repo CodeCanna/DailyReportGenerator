@@ -21,7 +21,7 @@ function show_help() {
     clear;
     # Declare vars
     local help_text;
-    help_text=$(cat /usr/share/help_doc.txt);
+    help_text=$(</usr/share/help_doc.txt);
     
     echo "$help_text";
     return 0;

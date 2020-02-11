@@ -105,7 +105,7 @@ function get_latest_report() {
         -e 's/[A-Z]//g' /tmp/keys.txt > /tmp/dates.txt;
 
     # Create report dates array and remove /tmp/dates.txt
-    local report_dates=($(cat /tmp/dates.txt)) && rm -f /tmp/dates.txt;
+    local report_dates=($(</tmp/dates.txt)) && rm -f /tmp/dates.txt;
 
     echo "${report_dates[@]}";
 }

@@ -129,7 +129,7 @@ function stringify_report() {
     report_file=/tmp/report_stringified.txt;
     
     # Store contents of /tmp/report_strin
-    local report_string=$(cat "$report_file");
+    local report_string=$(<"$report_file");
     
     rm -rf "$report_file";
     if [ -f "$report_file" ]; then
@@ -160,7 +160,7 @@ function unstringify_report() {
     # Store the unstringified report file in /tmp
     local report_unstringified_file=/tmp/report_unstringified_file.txt;
     
-    report_unstringified=$(cat "$report_unstringified_file");
+    report_unstringified=$(<"$report_unstringified_file");
     
     # Make sure /tmp/$report_unstringified_file got deleted
     rm -rf $report_unstringified_file;
