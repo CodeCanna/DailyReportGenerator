@@ -10,7 +10,7 @@ if [ "$USER" != 'root' ];then
 fi
 
 # Define export directory
-exp_dir=/home/$SUDO_USER/Documents/Work/Notes;
+exp_dir=/home/$SUDO_USER/Documents/Notes/;
 
 # Define install directory
 install_dir=/bin;
@@ -38,8 +38,17 @@ function install_genreport() {
     if [ ! -d "$exp_dir" ]; then
         sleep 0.5;
         
-        if (! mkdir --verbose --parents "$exp_dir" && chown "$SUDO_USER" "$exp_dir") then
+        # Create Export directory
+        if (! mkdir --verbose --parents "$exp_dir") then
             echo "Problem creating directory $exp_dir";
+            exit 1;
+        fi
+
+        # Set write permission to the expoort directory
+        if (! chown --verbose "$SUDO_USER" "$exp_dir") then
+            echo "There was a problem setting the propper permissions in $exp_dir";
+            echo "Make sure you are running this script as root with sudo...";
+            exit 1;
         fi
     fi
     
