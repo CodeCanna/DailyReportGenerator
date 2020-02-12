@@ -108,8 +108,6 @@ function edit_report() {
         return 1;
     fi
     
-    #echo "Report to edit $report_to_edit";
-    
     # Define report string and file
     local report_to_edit_string=$(get_report "$report_to_edit");
 
@@ -137,15 +135,15 @@ function edit_report() {
 
 function stringify_report() {
     # Get report file as an argument
-    report_file=$1;
+    local report_file=$1;
     
     # Get client name for file naming convention
-    client_name=$2;
+    local client_name=$2;
     
     # Stringify file contents by removing all \n and spaces
     cat $report_file | tr '\n' ';' | tr ' ' '+' > /tmp/report_stringified.txt;
     
-    report_file=/tmp/report_stringified.txt;
+    local report_file=/tmp/report_stringified.txt;
     
     # Store contents of /tmp/report_strin
     local report_string=$(<"$report_file");
@@ -165,7 +163,7 @@ function stringify_report() {
 }
 
 function unstringify_report() {
-    report_string=$1;
+    local report_string=$1;
     
     # Write report string to /tmp/report_stringified.txt and set it to $report_stringified_file
     echo "$report_string" > /tmp/report_stringified.txt && local report_stringified_file=/tmp/report_stringified.txt;
@@ -179,7 +177,7 @@ function unstringify_report() {
     # Store the unstringified report file in /tmp
     local report_unstringified_file=/tmp/report_unstringified_file.txt;
     
-    report_unstringified=$(<"$report_unstringified_file");
+    local report_unstringified=$(<"$report_unstringified_file");
     
     # Make sure /tmp/$report_unstringified_file got deleted
     rm -rf $report_unstringified_file;
