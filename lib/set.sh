@@ -6,6 +6,7 @@ source /lib/GenReport/check_redis_connection.sh;
 source /lib/GenReport/redis_connection.sh;
 source /lib/GenReport/get.sh;
 
+# Set set the report key and value arg. $1=key, $2=value
 function set_report() {
     # Check for redis connection and if no connection is found then make one
     if (! has_redis_connection) then
