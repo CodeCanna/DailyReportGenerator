@@ -99,7 +99,7 @@ function delete_report() {
 }
 
 function edit_report() {
-    report_to_edit=$1;
+    local report_to_edit=$1;
     
     # Verify input
     if [ -z "$report_to_edit" ]; then
@@ -109,11 +109,29 @@ function edit_report() {
     
     #echo "Report to edit $report_to_edit";
     
-    report_to_edit_string=$(get_report "$report_to_edit");
-    
-    unstringify_report "$report_to_edit_string" > /tmp/rpedit.txt;
-    
-    nano /tmp/rpedit.txt;
+    # Define report string and file
+    local report_to_edit_string=$(get_report "$report_to_edit");
+
+    # Check if report exists
+    if (! report_exists "$report_to_edit") then
+        echo "Report doesn't exist.  Cannot Edit...";
+        return 1;
+    fi
+
+    unstringify_report "$report_to_edit_string" > /tmp/"$report_to_edit";
+
+    # Edit report file
+    nano /tmp/"$report_to_edit";
+
+    local report_file=$(cat /tmp/"$report_to_edit");
+
+    # Set new value to old redis key
+    if (! redis-cli set "$report_to_edit" "$report_file" > /dev/null) then
+        echo "There was a problem writing your changes...";
+        return 1;
+    fi
+
+    return 0;
 }
 
 function stringify_report() {
