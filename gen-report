@@ -62,7 +62,7 @@ while getopts "n:p:e:b:l:t:d:x:h:-:kq" arg; do
             client_hours=${OPTARG}; # Set Client Hours
         ;;
         l)
-            entry_to_list=${OPTARG};
+            entry_to_list=${OPTARG}; # Get the entry to list
             
             rep_string=$(get_report "$entry_to_list");
             unstringify_report "$rep_string";
@@ -82,10 +82,11 @@ while getopts "n:p:e:b:l:t:d:x:h:-:kq" arg; do
             exit 0;
         ;;
         d)
-            delete_report ${OPTARG};
-            if [ $? != 0 ]; then
+            if (! delete_report ${OPTARG}) then
+                echo "There was a problem deleting ${OPTARG}, it might not exist...";
                 exit 1;
             fi
+
             exit 0;
         ;;
         x)
