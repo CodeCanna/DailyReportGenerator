@@ -178,7 +178,7 @@ _EOF_
     return 0;
 }
 
-# Check if all arguments are accounted for
+# Check if all required arguments are accounted for
 if [ -z "$client_name" ]; then
     echo "You cannot leave Client Name field empty...";
     exit 1;
@@ -193,6 +193,9 @@ if [ -z "$client_name" ]; then
     exit 1;
     elif [ -z "$client_hours" ]; then
     echo "You cannot leave Client Hours field empty...";
+    exit 1;
+    else
+    echo "The data you provided is invalid, please try again...";
     exit 1;
 fi
 
