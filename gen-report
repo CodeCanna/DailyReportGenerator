@@ -17,12 +17,13 @@ report_path=/home/awesomepilot/Documents/Work/Notes
 # Get the current report file
 report_file=$report_path/$report_date.txt;
 
+# Show the built in help text
 function show_help() {
-    clear;
-    # Declare vars
+    # declare a variable to hold the content of help_doc.txt
     local help_text;
     help_text=$(</usr/share/help_doc.txt);
     
+    # Echo help text to screen
     echo "$help_text";
     return 0;
 }
