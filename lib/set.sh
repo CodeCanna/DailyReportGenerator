@@ -130,6 +130,9 @@ function edit_report() {
         return 1;
     fi
 
+    # Remove temporary files
+    rm -f /tmp/"$report_to_edit";
+
     return 0;
 }
 
