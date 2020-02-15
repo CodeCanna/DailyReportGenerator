@@ -69,7 +69,14 @@ while getopts "n:p:e:b:l:t:d:x:h:-:kq" arg; do
             exit 0;
         ;;
         k)
-            get_all_report_keys;
+            # Get output of get_all_report_keys() and put it in an array
+            key_arr=($(get_all_report_keys));
+
+            # Iterate through the array and list our options on seperate lines
+            for key in "${key_arr[@]}"; do
+                echo "$key";
+            done
+            
             exit 0;
         ;;
         t) # (t)ransform edits reports
