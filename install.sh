@@ -136,11 +136,28 @@ case $1 in
         echo "Uninstallation Sucessful!!";
         exit 0;
     ;;
+    '--reinstall')
+        # Run the uninstall
+        if (! uninstall_genreport) then
+            echo "Re-install failed at uninstalling genreport...";
+            exit 1
+        fi
+
+        # Run the install
+        if (! install_genreport) then
+            echo "Re-install failed at installing genreport...";
+            exit 1
+        fi
+
+        echo "Re-installation Sucessful!!";
+    ;;
     '-h' | '--help')
         echo "Run [sudo ./install.sh] to install GenReport.";
         echo "Run [sudo ./install.sh --uninstall] to uninstall GenReport";
+        echo "Run [sudo ./install.sh --reinstall] to re-install GenReport";
+        exit 0;
     ;;
-    '' | ' ')
+    '' | ' ') # This is because often times a space can be added when pasting, so I covered all the bases
         if (! install_genreport) then
             echo "Installation Failed...";
             exit 1;
