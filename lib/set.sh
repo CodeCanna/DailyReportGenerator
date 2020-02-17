@@ -32,10 +32,8 @@ function set_report() {
     concatted_nospace_report_name=$(cat /tmp/rp_nospace_name.txt);
     
     # Check if report exists
-    report_exists "$concatted_nospace_report_name";
-    if [ "$?" == 0 ]; then
-        whiptail --yesno "This report already exists, would you like to edit it?" --yes-button "Edit" --no-button "Cancel" 10 70;
-        if [ "$?" == 0 ]; then
+    if (report_exists "$concatted_nospace_report_name") then
+        if (whiptail --yesno "This report already exists, would you like to edit it?" --yes-button "Edit" --no-button "Cancel" 10 70) then
             edit_report "$concatted_nospace_report_name";
         fi
     fi
@@ -63,8 +61,7 @@ function set_report() {
     local report_string=$(stringify_report "$report_content");
     
     # Store data and save it to disk
-    redis-cli set "$concatted_nospace_report_name" "$report_string" > /dev/null && redis-cli bgsave > /dev/null;
-    if [ "$?" != 0 ]; then
+    if (! redis-cli set "$concatted_nospace_report_name" "$report_string" > /dev/null && redis-cli bgsave > /dev/null) then
         echo "There was a problem saving your reports database";
         echo "Your data is at risk of loss!";
         return 1;
@@ -74,22 +71,16 @@ function set_report() {
 }
 
 function delete_report() {
-    report_to_delete_key=$1;
+    local report_to_delete_key="$1";
 
     # If no redis connection is detected, create one
     if (! has_redis_connection) then
         create_redis_connection;
     fi
 
-    report_exists "$report_to_delete_key";
-    if [ "$?" != 0 ]; then
+    # Check if report exists
+    if (! report_exists "$report_to_delete_key") then
         echo "Report doesn't exist...";
-        return 1;
-    fi
-
-    # Get the report the delete
-    get_report "$report_to_delete_key" > /tmp/rpstring.txt;
-    if [ "$?" != 0 ]; then
         return 1;
     fi
 
