@@ -3,15 +3,13 @@
 set -o posix;
 
 function create_redis_connection() {
-    do_connect;
-    if [ "$?" != 0 ]; then
+    if (! do_connect) then
         echo "This program needs Redis to be running.  Exiting!";
         exit 1;
     fi
 
     # Start a redis instance
-    systemctl start redis;
-    if [ "$?" != 0 ]; then
+    if (! systemctl start redis) then
         echo "There was a problem starting redis!"\
         "Try running 'systemctl status redis' to see why Redis failed to start."\
         "This is a Fatal Error, Exiting" >&2;
