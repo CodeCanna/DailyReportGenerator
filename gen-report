@@ -14,7 +14,7 @@ report_date=$(date +%Y-%m-%d); # Sets file name later
 report_path=/home/awesomepilot/Documents/Work/Notes
 
 # Get the current report file
-report_file=$report_path/$report_date.txt;
+report_file="$report_path/$report_date.txt";
 
 # Show the built in help text
 function show_help() {
@@ -29,17 +29,16 @@ function show_help() {
 
 # A function to export the report as a text file
 function export_report() {
-    local report_to_export=$1;
+    local report_to_export="$1";
     
-    report_exists "$report_to_export";
-    if [ "$?" == 1 ]; then
+    if (! report_exists "$report_to_export") then
         echo "That report doesn't exist.  Nothing exported...";
         exit 1;
     fi
     
     local report_string=$(get_report "$report_to_export");
     
-    unstringify_report "$report_string" > /home/$USER/Documents/Notes/$report_to_export.txt;
+    unstringify_report "$report_string" > /home/"$USER"/Documents/Notes/"$report_to_export.txt";
 }
 
 # Parse arguments and set variables
@@ -174,8 +173,7 @@ _EOF_
     report_text=/tmp/report.txt;
     
     # Insert generated report into redis
-    set_report "$client_name" "$report_text";
-    if [ "$?" != 0 ]; then
+    if (! set_report "$client_name" "$report_text") then
         echo "There was a problem inserting your report...Make sure Redis is up?";
         exit 1;
     fi
