@@ -45,7 +45,7 @@ function install_genreport() {
         fi
 
         # Set write permission to the expoort directory
-        if (! chown --verbose "$SUDO_USER" "$exp_dir") then
+        if ! chown --verbose "$SUDO_USER" "$exp_dir"; then
             echo "There was a problem setting the propper permissions in $exp_dir";
             echo "Make sure you are running this script as root with sudo...";
             exit 1;
@@ -54,28 +54,28 @@ function install_genreport() {
     
     # Install GenReport Library
     sleep 0.5;
-    if (! cp --recursive --force --verbose ./lib/* $lib_dir) then
+    if ! cp --recursive --force --verbose ./lib/* $lib_dir; then
         echo "There was a problem copying ./lib to $lib_dir";
         exit 1;
     fi
     
     # Install test library
     sleep 0.5
-    if(! cp --recursive --force --verbose ./test "$lib_dir") then
+    if ! cp --recursive --force --verbose ./test "$lib_dir"; then
         echo "There was a problem installing the test library...";
         exit 1;
     fi
     
     # Install help doc
     sleep 0.5;
-    if (! cp --force --verbose ./help_doc.txt "$help_dir") then
+    if ! cp --force --verbose ./help_doc.txt "$help_dir"; then
         echo "There was a problem copying ./help_doc.txt to $help_dir";
         exit 1;
     fi
     
     # Install GenReport
     sleep 0.5;
-    if (! cp --recursive --force --verbose ./gen-report "$install_dir") then
+    if ! cp --recursive --force --verbose ./gen-report "$install_dir"; then
         echo "There was a problem copying ./gen-report to $install_dir";
         exit 1;
     fi
@@ -95,14 +95,14 @@ function uninstall_genreport() {
     
     # Remove export directory
     sleep 0.5;
-    if (! rm --recursive --force --recursive --force --verbose "$exp_dir") then
+    if ! rm --recursive --force --recursive --force --verbose "$exp_dir"; then
         echo "There was a problem removing $exp_dir";
         exit 1;
     fi
     
     # Remove libraries
     sleep 0.5;
-    if (! rm --recursive --force --recursive --force --verbose "$lib_dir") then
+    if ! rm --recursive --force --recursive --force --verbose "$lib_dir"; then
         echo "There was a problem removing $lib_dir/GenReport";
         exit 1;
     fi
@@ -111,14 +111,14 @@ function uninstall_genreport() {
     
     # Remove gen-report
     sleep 0.5;
-    if (! rm --force --verbose "$install_dir/gen-report") then
+    if ! rm --force --verbose "$install_dir/gen-report"; then
         echo "There was a problem removing $install_dir/gen-report";
         exit 1;
     fi
     
     # Remove help_doc
     sleep 0.5;
-    if (! rm --force --verbose "$help_dir"/help_doc.txt) then
+    if ! rm --force --verbose "$help_dir"/help_doc.txt; then
         echo "Couldn't remove $help_dir/help_doc.txt";
         exit 1;
     fi
@@ -128,7 +128,7 @@ function uninstall_genreport() {
 
 case $1 in
     '--uninstall')
-        if (! uninstall_genreport) then
+        if ! uninstall_genreport; then
             # Exit in failure
             echo "Uninstallation Failed...";
             exit 1;
@@ -140,13 +140,13 @@ case $1 in
     ;;
     '--reinstall')
         # Run the uninstall
-        if (! uninstall_genreport) then
+        if ! uninstall_genreport; then
             echo "Re-install failed at uninstalling genreport...";
             exit 1
         fi
 
         # Run the install
-        if (! install_genreport) then
+        if ! install_genreport; then
             echo "Re-install failed at installing genreport...";
             exit 1
         fi
@@ -160,7 +160,7 @@ case $1 in
         exit 0;
     ;;
     '' | ' ') # This is because often times a space can be added when pasting, so I covered all the bases
-        if (! install_genreport) then
+        if ! install_genreport; then
             echo "Installation Failed...";
             exit 1;
         fi
