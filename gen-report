@@ -33,7 +33,7 @@ function show_help() {
 function export_report() {
     local report_to_export="$1";
     
-    if (! report_exists "$report_to_export") then
+    if ! report_exists "$report_to_export"; then
         echo "That report doesn't exist.  Nothing exported...";
         exit 1;
     fi
@@ -89,7 +89,7 @@ while getopts "n:p:e:b:l:t:d:x:h:-:kq" arg; do
             exit 0;
         ;;
         d)
-            if (! delete_report ${OPTARG}) then
+            if ! delete_report ${OPTARG}; then
                 echo "There was a problem deleting ${OPTARG}, it might not exist...";
                 exit 1;
             fi
