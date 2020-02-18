@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# TODO: Make an option for generating reports with custom dates on the fly ex. gen-report -n 'bob' -p '123-123-1230' -e 'me@me.com' -b 'bob inc' -h '5' -d '05-04-2020'
+
 # Set posix mode
 set -o posix;
 
@@ -106,14 +108,14 @@ while getopts "n:p:e:b:l:t:d:x:h:-:kq" arg; do
                 ;;
                 'test')
                     if (! bash /lib/GenReport/test/master_test.sh) then  # Run tests, be sure to run with bash and not sh
-                        echo "Failed to start tests...make sure the installation went smoothly!";
+                        echo "Failed to start tests...is your default CLI environment /bin/sh?  If so please change to /bin/bash";
                         exit 1;
                     fi
 
                     exit 0;
                 ;;
                 *)
-                    echo "Something is wrong with your print help case statement...";
+                    echo "Something went terribly wrong, please contact codecannamw@gmail.com to report this issue.";
                     exit 1;
             esac
         ;;
@@ -133,7 +135,19 @@ function create_work_notes() {
     
     # Get work notes
     echo "Enter work notes, hit Ctl-D to save>";
-    work=$(</dev/stdin);
+    work=$(</dev/stdin); # Cannot be local
+
+    # Check if work notes were left blank
+    if [ -z "$work" ]; then
+        if (whiptail --title "Leave notes blank?" --yesno "Are you sure you want to leave your work notes blank?" 8 78) then
+            work='N/A';
+        else
+            work=$(</dev/stdin);
+            
+        fi
+    fi
+
+    return 0;
 }
 
 function create_side_notes() {
@@ -142,7 +156,14 @@ function create_side_notes() {
     
     # Set side notes
     echo "Enter side notes if any, hit Ctl-D to save>";
-    notes=$(</dev/stdin);
+    notes=$(</dev/stdin); # Cannot be local
+
+    # Check if side notes were left blank
+    if [ -z "$notes" ]; then
+        notes='N/A';
+    fi
+
+    return 0;
 }
 
 
@@ -175,7 +196,7 @@ _EOF_
     # Insert generated report into redis
     if (! set_report "$client_name" "$report_text") then
         echo "There was a problem inserting your report...Make sure Redis is up?";
-        exit 1;
+        return 1;
     fi
     
     rm -rf "$report_text";
@@ -199,11 +220,8 @@ if [ -z "$client_name" ]; then
     echo "You cannot leave Client Hours field empty...";
     exit 1;
     else
-    echo "The data you provided is invalid, please try again...";
-    exit 1;
+    # Create new report if not exists and overwrite if it does
+    create_work_notes;
+    create_side_notes;
+    create_report;
 fi
-
-# Create new report if not exists and overwrite if it does
-create_work_notes;
-create_side_notes;
-create_report;
