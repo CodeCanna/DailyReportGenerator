@@ -10,7 +10,7 @@ source /lib/GenReport/get.sh;
 # Set set the report key and value arg. $1=key, $2=value
 function set_report() {
     # Check for redis connection and if no connection is found then make one
-    if (! has_redis_connection) then
+    if ! has_redis_connection; then
         create_redis_connection;
     fi
     
@@ -46,7 +46,7 @@ function set_report() {
     concatted_nospace_report_name=$(cat /tmp/rp_nospace_name.txt);
     
     # Check if report exists
-    if (report_exists "$concatted_nospace_report_name") then
+    if report_exists "$concatted_nospace_report_name"; then
         if (whiptail --title "Overwrite Report?" --yesno "This report already exists, would you like to overwrite it?" --yes-button "Cancel" --no-button "Overwrite" 10 70) then
             clear && echo "Nothing was overwritten...";
             echo "Exiting...";
@@ -79,7 +79,7 @@ function set_report() {
     local report_string=$(stringify_report "$report_content");
     
     # Store data and save it to disk
-    if (! redis-cli set "$concatted_nospace_report_name" "$report_string" > /dev/null && redis-cli bgsave > /dev/null) then
+    if ! redis-cli set "$concatted_nospace_report_name" "$report_string" > /dev/null && redis-cli bgsave > /dev/null; then
         echo "There was a problem saving your reports database";
         echo "Your data is at risk of loss!";
         return 1;
@@ -92,12 +92,12 @@ function delete_report() {
     local report_to_delete_key="$1";
 
     # If no redis connection is detected, create one
-    if (! has_redis_connection) then
+    if ! has_redis_connection; then
         create_redis_connection;
     fi
 
     # Check if report exists
-    if (! report_exists "$report_to_delete_key") then
+    if ! report_exists "$report_to_delete_key"; then
         echo "Report doesn't exist...";
         return 1;
     fi
@@ -121,7 +121,7 @@ function edit_report() {
     local report_to_edit_string=$(get_report "$report_to_edit");
 
     # Check if report exists
-    if (! report_exists "$report_to_edit") then
+    if ! report_exists "$report_to_edit" then
         echo "Report doesn't exist.  Cannot Edit...";
         return 1;
     fi
@@ -134,7 +134,7 @@ function edit_report() {
     local report_file=$(cat /tmp/"$report_to_edit");
 
     # Set new value to old redis key
-    if (! redis-cli set "$report_to_edit" "$report_file" > /dev/null) then
+    if ! redis-cli set "$report_to_edit" "$report_file" > /dev/null then
         echo "There was a problem writing your changes...";
         return 1;
     fi
