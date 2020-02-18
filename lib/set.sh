@@ -16,8 +16,21 @@ function set_report() {
     # Get date for file naming
     local DATE=$(date +%Y-%m-%d);
     
-    local report_name=$1; # Key
-    local report_content=$2 # Value;
+    local report_name="$1"; # Key
+    local report_content="$2"; # Value;
+    local is_custom_date="$3"; # was --date used? true or false
+    local custom_date="$4"; # Pass the custom date
+
+    if [ ! -z "$is_custom_date" ]; then
+        if [[ "$is_custom_date" != 'true' ]] || [[ "$is_custom_date" != 'false' ]]; then
+            echo "Something went wrong setting the is_custom_date value...$is_custom_date";
+            return 1;
+        fi
+
+        if ( "$is_custom_date" == 'true' ) then
+            DATE="$custom_date";
+        fi
+    fi
     
     # Concat date with report name to create the naming convention I want
     local concatted_report_name="$report_name"'_'"$DATE";
@@ -33,7 +46,7 @@ function set_report() {
     
     # Check if report exists
     if (report_exists "$concatted_nospace_report_name") then
-        if (whiptail --yesno "This report already exists, would you like to edit it?" --yes-button "Edit" --no-button "Cancel" 10 70) then
+        if (whiptail --yesno "This report already exists, would you like to edit it?" --yes-button "Edit" --no-button "Overwrite" 10 70) then
             edit_report "$concatted_nospace_report_name";
         fi
     fi
