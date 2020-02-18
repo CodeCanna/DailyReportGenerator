@@ -2,6 +2,7 @@
 
 set -o posix;
 
+# Import libraries
 source /lib/GenReport/check_redis_connection.sh;
 source /lib/GenReport/redis_connection.sh;
 source /lib/GenReport/get.sh;
