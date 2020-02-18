@@ -143,7 +143,6 @@ function create_work_notes() {
             work='N/A';
         else
             work=$(</dev/stdin);
-            
         fi
     fi
 
