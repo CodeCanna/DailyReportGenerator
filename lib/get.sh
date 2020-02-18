@@ -8,7 +8,7 @@ source /lib/GenReport/check_redis_connection.sh;
 # Get report based on given key
 function get_report() {
     # Check for redis connection and if no connection is found then make one
-    if (! has_redis_connection) then
+    if ! has_redis_connection; then
         create_redis_connection;
     fi
     
@@ -33,7 +33,7 @@ function get_report() {
 # Get all report redis keys from the database
 function get_all_report_keys() {
     # Check for redis connection and if no connection is found then make one
-    if (! has_redis_connection) then
+    if ! has_redis_connection; then
         create_redis_connection;
     fi
     
