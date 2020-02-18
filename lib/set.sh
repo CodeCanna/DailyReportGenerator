@@ -46,8 +46,10 @@ function set_report() {
     
     # Check if report exists
     if (report_exists "$concatted_nospace_report_name") then
-        if (whiptail --yesno "This report already exists, would you like to edit it?" --yes-button "Edit" --no-button "Overwrite" 10 70) then
-            edit_report "$concatted_nospace_report_name";
+        if (whiptail --yesno "This report already exists, would you like to overwrite it?" --yes-button "Cancel" --no-button "Overwrite" 10 70) then
+            echo "Nothing was overwritten...";
+            echo "Exiting...";
+            return 0;
         fi
     fi
     
