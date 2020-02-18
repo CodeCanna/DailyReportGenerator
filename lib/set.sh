@@ -46,16 +46,18 @@ function set_report() {
     
     # Check if report exists
     if (report_exists "$concatted_nospace_report_name") then
-        if (whiptail --yesno "This report already exists, would you like to overwrite it?" --yes-button "Cancel" --no-button "Overwrite" 10 70) then
-            echo "Nothing was overwritten...";
+        if (whiptail --title "Overwrite Report?" --yesno "This report already exists, would you like to overwrite it?" --yes-button "Cancel" --no-button "Overwrite" 10 70) then
+            clear && echo "Nothing was overwritten...";
             echo "Exiting...";
             return 0;
         fi
+        
+        # Inform user that they overwrited their report and tell what report they overwrote
+        clear && echo "Overwriting report: $concatted_nospace_report_name" && sleep 2;
     fi
     
     # Remove temporary files
-    rm -f /tmp/rpname.txt;
-    rm -f /tmp/rp_nospace_name.txt;
+    rm -f /tmp/rpname.txt && rm -f /tmp/rp_nospace_name.txt;
     
     # Verify arguments
     if [[ $report_name == 0 ]] || [[ $report_content == 0 ]]; then
