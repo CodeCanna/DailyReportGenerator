@@ -107,7 +107,7 @@ while getopts "n:p:e:b:l:t:d:x:h:-:kq" arg; do
                     exit 0;
                 ;;
                 'test')
-                    if (! bash /lib/GenReport/test/master_test.sh) then  # Run tests, be sure to run with bash and not sh
+                    if ! bash /lib/GenReport/test/master_test.sh; then  # Run tests, be sure to run with bash and not sh
                         echo "Failed to start tests...is your default CLI environment /bin/sh?  If so please change to /bin/bash";
                         exit 1;
                     fi
