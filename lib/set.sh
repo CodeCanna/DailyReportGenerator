@@ -121,7 +121,7 @@ function edit_report() {
     local report_to_edit_string=$(get_report "$report_to_edit");
 
     # Check if report exists
-    if ! report_exists "$report_to_edit" then
+    if ! report_exists "$report_to_edit"; then
         echo "Report doesn't exist.  Cannot Edit...";
         return 1;
     fi
