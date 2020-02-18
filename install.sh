@@ -23,7 +23,7 @@ help_dir=/usr/share;
 
 # GenReport Installer
 function install_genreport() {
-    echo "Starting Install";
+    echo "### Starting Install ###";
     
     # Create lib directory if it does NOT exist
     if [ ! -d "$lib_dir" ]; then
@@ -85,7 +85,7 @@ function install_genreport() {
 
 # GenReport Uninstaller
 function uninstall_genreport() {
-    echo "Starting Uninstall";
+    echo "### Starting Uninstall ###";
 
     # Check if GenReport is even installed
     if [ ! -f /bin/gen-report ]; then
