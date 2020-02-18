@@ -139,10 +139,10 @@ function create_work_notes() {
 
     # Check if work notes were left blank
     if [ -z "$work" ]; then
-        if (whiptail --title "Leave notes blank?" --yesno "Are you sure you want to leave your work notes blank?" 8 78) then
-            work='N/A';
-        else
+        if (whiptail --title "Leave notes blank?" --yesno "Are you sure you want to leave your work notes blank?" --yes-button "No" --no-button "Yes" 8 78) then
             work=$(</dev/stdin);
+        else
+            work='N/A';
         fi
     fi
 
