@@ -21,8 +21,24 @@ lib_dir=/lib/GenReport;
 # Define help_doc directory
 help_dir=/usr/share;
 
+# Define Redis config dir (To check that Redis is installed)
+redis_dir=/etc/redis;
+
+# TODO: Add a check for a Redis Installation
 # GenReport Installer
 function install_genreport() {
+    echo "### Cehcking for Redis ###";
+    if [ ! -d "$redis_dir" ]; then
+        echo "Redis is not installed you will need to install Redis on your distribution for gen-report to work.";
+        while true; do
+            read -p "Do you want to continue with installation? (Y, N)" c_yn;
+            case $c_yn in
+                [Yy]*) break;;
+                [Nn]*) echo "Aborting Install..." ; exit;;
+                * ) echo "Please answer Yes or No";;
+            esac
+        done
+    fi
     echo "### Starting Install ###";
     
     # Create lib directory if it does NOT exist
