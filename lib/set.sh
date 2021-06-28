@@ -134,7 +134,7 @@ function edit_report() {
     local report_file=$(cat /tmp/"$report_to_edit");
 
     # Set new value to old redis key
-    if ! redis-cli set "$report_to_edit" "$report_file" > /dev/null then
+    if ! redis-cli set "$report_to_edit" "$report_file" > /dev/null; then
         echo "There was a problem writing your changes...";
         return 1;
     fi
