@@ -24,7 +24,6 @@ help_dir=/usr/share;
 # Define Redis config dir (To check that Redis is installed)
 redis_dir=/etc/redis;
 
-# TODO: Add a check for a Redis Installation
 # GenReport Installer
 function install_genreport() {
     echo "### Cehcking for Redis ###";
